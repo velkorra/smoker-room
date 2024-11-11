@@ -4,7 +4,7 @@ package me.bernkastel.smokers.smoking;
 import me.bernkastel.smokers.websocket.SimulationWebSocketHandler;
 
 public class Smoker extends Thread {
-    private static final int DEFAULT_SMOKING_TIME = 200;
+    private static final int DEFAULT_SMOKING_TIME = 1500;
     private int cigarettesSmoked = 0;
 
     private final String name;
@@ -35,9 +35,7 @@ public class Smoker extends Thread {
                     table.takeItems();
                     state = SmokerState.SMOKING;
                     smoke();
-                    state = SmokerState.IDLE;
                 }
-                Thread.sleep(100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
