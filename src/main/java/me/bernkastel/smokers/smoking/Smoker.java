@@ -4,7 +4,7 @@ package me.bernkastel.smokers.smoking;
 import me.bernkastel.smokers.websocket.SimulationWebSocketHandler;
 
 public class Smoker extends Thread {
-    private static final int DEFAULT_SMOKING_TIME = 1500;
+    private static final int DEFAULT_SMOKING_TIME = 3000;
     private int cigarettesSmoked = 0;
 
     private final String name;

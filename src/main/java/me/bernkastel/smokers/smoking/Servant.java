@@ -8,7 +8,7 @@ public class Servant extends Thread {
     private final String name;
     private final Table table;
     private volatile boolean isRunning;
-    private static final int CHECK_INTERVAL = 100;
+    private static final int CHECK_INTERVAL = 1000;
     private int putInterval = CHECK_INTERVAL;
     private final SimulationWebSocketHandler notifier;
 
