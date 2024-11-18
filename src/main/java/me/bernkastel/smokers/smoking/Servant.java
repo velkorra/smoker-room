@@ -8,16 +8,16 @@ public class Servant extends Thread {
     private final String name;
     private final Table table;
     private volatile boolean isRunning;
-    private static final int CHECK_INTERVAL = 1000;
-    private int putInterval = CHECK_INTERVAL;
+    private int putInterval;
     private final SimulationWebSocketHandler notifier;
 
 
-    public Servant(String name, Table table, SimulationWebSocketHandler notifier) {
+    public Servant(String name, Table table, int putInterval, SimulationWebSocketHandler notifier) {
         this.name = name;
         this.table = table;
         this.isRunning = true;
         this.notifier = notifier;
+        this.putInterval = putInterval;
     }
 
     @Override

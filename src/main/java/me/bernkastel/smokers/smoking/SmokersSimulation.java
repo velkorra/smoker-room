@@ -25,6 +25,8 @@ public class SmokersSimulation {
     private final SimulationWebSocketHandler webSocketHandler;
     private boolean running = false;
     private Thread loggingThread;
+    private int smokingTime = SimulationConstants.DEFAULT_SMOKE_TIME;
+    private int checkTime = SimulationConstants.DEFAULT_CHECK_INTERVAL;
 
 
     public SmokersSimulation(SimulationWebSocketHandler webSocketHandler) {
@@ -33,13 +35,12 @@ public class SmokersSimulation {
         this.table = new Table(webSocketHandler);
         this.smokers = new ArrayList<>();
 
-        smokers.add(new Smoker("Курильщик с табаком", Stuff.TOBACCO, table, webSocketHandler));
-        smokers.add(new Smoker("Курильщик с бумагой", Stuff.PAPER, table, webSocketHandler));
-        smokers.add(new Smoker("Курильщик со спичками", Stuff.MATCH, table, webSocketHandler));
+        smokers.add(new Smoker("Курильщик с табаком", Stuff.TOBACCO, table, smokingTime, webSocketHandler));
+        smokers.add(new Smoker("Курильщик с бумагой", Stuff.PAPER, table, smokingTime, webSocketHandler));
+        smokers.add(new Smoker("Курильщик со спичками", Stuff.MATCH, table, smokingTime, webSocketHandler));
 
-        this.servant = new Servant("Слуга", table, webSocketHandler);
+        this.servant = new Servant("Слуга", table, checkTime, webSocketHandler);
     }
-
 
 
     public void start() {
@@ -82,7 +83,6 @@ public class SmokersSimulation {
         }
     }
 
-    // Добавляем метод для проверки состояния симуляции
     public boolean isRunning() {
         return running;
     }
@@ -108,7 +108,17 @@ public class SmokersSimulation {
         }
     }
 
+    public void setSmokingTime(int smokingTime) {
+        this.smokingTime = smokingTime;
+    }
 
+    public void setCheckTimeCurrent(int checkTime) {
+        servant.setPutInterval(checkTime);
+    }
+
+    public void setDefaultCheckTime(int checkTime) {
+        this.checkTime = checkTime;
+    }
 
     public void setSmokeTime(int milliseconds) {
         smokers.forEach(s -> s.setSmoking(milliseconds));

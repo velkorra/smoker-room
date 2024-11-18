@@ -4,7 +4,6 @@ package me.bernkastel.smokers.smoking;
 import me.bernkastel.smokers.websocket.SimulationWebSocketHandler;
 
 public class Smoker extends Thread {
-    private static final int DEFAULT_SMOKING_TIME = 3000;
     private int cigarettesSmoked = 0;
 
     private final String name;
@@ -17,11 +16,11 @@ public class Smoker extends Thread {
 
     private int smokingTime;
 
-    public Smoker(String name, Stuff ownedItem, Table table, SimulationWebSocketHandler notifier) {
+    public Smoker(String name, Stuff ownedItem, Table table, int smokingTime, SimulationWebSocketHandler notifier) {
         this.name = name;
         this.ownedItem = ownedItem;
         this.table = table;
-        this.smokingTime = DEFAULT_SMOKING_TIME;
+        this.smokingTime = smokingTime;
         this.isRunning = true;
         this.notifier = notifier;
     }
