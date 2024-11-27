@@ -30,13 +30,12 @@ public class Smoker extends Thread {
         while (isRunning) {
             try {
                 state = SmokerState.WAITING;
-                if (table.canTakeItems(ownedItem)) {
-                    table.takeItems();
+                    table.takeItemsIfAble(ownedItem);
                     state = SmokerState.SMOKING;
                     smoke();
-                }
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                state = SmokerState.IDLE;
+                notifier.broadcastNotification(name + " был прерван");
                 break;
             }
         }
@@ -64,7 +63,9 @@ public class Smoker extends Thread {
     }
 
     public void stopSmoking() {
+        state = SmokerState.IDLE;
         this.isRunning = false;
+        notifier.broadcastNotification(name + " был остановлен");
     }
 
     public SmokerState getSmokerState() {

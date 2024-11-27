@@ -21,15 +21,10 @@ public class Table {
 
     }
 
-    public void putItems(Stuff item1, Stuff item2) {
+    public void putItems(Stuff item1, Stuff item2) throws InterruptedException {
         synchronized (lock) {
             while (isOccupied) {
-                try {
-                    lock.wait(SimulationConstants.DEFAULT_TIMEOUT);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+                lock.wait();
             }
 
             items.clear();
@@ -43,18 +38,11 @@ public class Table {
         }
     }
 
-
-    public boolean canTakeItems(Stuff ownedItem) {
+    public void takeItemsIfAble(Stuff ownedItem) throws InterruptedException {
         synchronized (lock) {
-            if (!isOccupied) return false;
-            return items.size() == 2 && !items.contains(ownedItem);
-        }
-    }
-
-    public void takeItems() {
-        synchronized (lock) {
-            if (!isOccupied) {
-                throw new IllegalStateException("Стол пуст!");
+            while (!isOccupied || !(items.size() == 2 && !items.contains(ownedItem)))
+            {
+                lock.wait();
             }
 
             items.clear();

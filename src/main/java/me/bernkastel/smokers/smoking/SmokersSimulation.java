@@ -66,9 +66,10 @@ public class SmokersSimulation {
     public void stop() {
         running = false;
         smokers.forEach(Smoker::stopSmoking);
+        smokers.forEach(Smoker::interrupt);
         servant.stopServing();
+        servant.interrupt();
         logger.info("Simulation stopped");
-
         try {
             if (loggingThread != null) {
                 loggingThread.interrupt();
@@ -81,6 +82,13 @@ public class SmokersSimulation {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        try {
+            webSocketHandler.broadcastState(new SimulationDto(this));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        logger.info("Simulation fully stopped.");
+
     }
 
     public boolean isRunning() {

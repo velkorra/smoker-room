@@ -22,15 +22,13 @@ public class Servant extends Thread {
 
     @Override
     public void run() {
-        while (isRunning) {
+        while (!Thread.interrupted()) {
             try {
-                if (!table.isOccupied()) {
-                    Stuff[] items = generateRandomItems();
-                    table.putItems(items[0], items[1]);
-                    notifier.broadcastNotification(name + " положил на стол " + items[0] + " и " + items[1]);
-                }
-                this.sleep(putInterval);
+                Stuff[] items = generateRandomItems();
+                table.putItems(items[0], items[1]);
+                notifier.broadcastNotification(name + " положил на стол " + items[0] + " и " + items[1]);
             } catch (InterruptedException e) {
+                notifier.broadcastNotification(name + " был прерван");
                 Thread.currentThread().interrupt();
                 break;
             }
